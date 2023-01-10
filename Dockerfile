@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:lts
 
 RUN npm i --global @adonisjs/cli
 
