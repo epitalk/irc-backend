@@ -24,9 +24,10 @@ services:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: mariadb
-      MYSQL_ROOT_PASSWORD: root
+      PMA_USER: root
+      PMA_PASSWORD: root
     ports:
-      - "8080:80"
+      - "8080:8080"
     depends_on:
       - mariadb
 
