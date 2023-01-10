@@ -18,4 +18,4 @@ services:
       MYSQL_ROOT_PASSWORD: adonis
       MYSQL_USER: adonis
       MYSQL_PASSWORD: adonis
-      MYSQL_DATABASE: adonis
+      MYSQL_DATABASE: irc
