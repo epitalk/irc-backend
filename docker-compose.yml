@@ -16,9 +16,9 @@ services:
     image: mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: adonis
-      MYSQL_USER: adonis
-      MYSQL_PASSWORD: adonis
+      MYSQL_ROOT_PASSWORD:
+      MYSQL_USER: root
+      MYSQL_PASSWORD:
       MYSQL_DATABASE: irc
 
   mercure-sse:
