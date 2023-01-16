@@ -59,9 +59,8 @@ CreateBranch() {
     gh issue develop "$2" --name "feature/$branch_name" --base "$branch_name"
 
     git fetch origin
-    git pull origin "$branch_name"
     # Checkout to the created branch
-    git checkout "$branch_name"
+    git checkout "feature/$branch_name"
 
     echo "branch $branch_name created and checkout successfully"
     exit 0
