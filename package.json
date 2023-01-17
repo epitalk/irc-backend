@@ -57,6 +57,8 @@
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/lucid": "^18.3.0",
     "@adonisjs/repl": "^3.1.11",
+    "got": "11",
+    "jws": "^4.0.0",
     "luxon": "^3.2.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.0.1",
