@@ -19,7 +19,12 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import PostsController from 'App/Controllers/Http/PostsController'
 
 Route.get('/', async () => {
   return { hello: 'world' }
+})
+
+Route.get('/test', async (ctx) => {
+  return new PostsController().index(ctx)
 })
