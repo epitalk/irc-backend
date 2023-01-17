@@ -3,7 +3,7 @@ import PostsController from 'App/Controllers/Http/PostsController'
 import './routes/sse-starter.ts'
 
 Route.get('/', async () => {
-  return { hello: 'dsds' }
+  return { hello: 'QSDSQDSQSSDQ' }
 })
 
 Route.get('/test', async (ctx) => {
