@@ -8,20 +8,12 @@ Route.get('/auth/:id', async () => {
   })
 })
 
-Route.get('/chat/topics', async () => {
-  const options = {
-    headers: {
-      Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiJ9.eyJtZXJjdXJlIjp7InN1YnNjcmliZSI6WyIqIl19fQ.g3w81T7YQLKLrgovor9uEKUiOCAx6DmAAbq18qmDwsY',
-    },
-  }
-  return got.get('http://localhost:1405/.well-known/mercure/subscriptions', options)
+Route.get('/chat/channels', async () => {
+  return Mercure.getTopic()
 })
 
 Route.post('/chat/public', async ({ request }) => {
   const message: string = await request.input('message')
-
-  console.log(message)
 
   new Update(['general'], { message }).send()
 
@@ -36,15 +28,15 @@ Route.post('/chat/public', async ({ request }) => {
 //   return { status: 'Ok' }
 // })
 
-Route.post('/chat/topic', async ({ request }) => {
-  const topic: string = await request.input('topic')
+Route.post('/chat/channel', async ({ request }) => {
+  const topic: string = await request.input('name')
   await Mercure.createTopic(topic)
 
   return Mercure.getTopic()
 })
 
 class Mercure {
-  private static topics = [] as String[]
+  private static topics = ["general"] as String[]
   private static mercureUrl = 'http://localhost:1405/.well-known/mercure'
   private static token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.obDjwCgqtPuIvwBlTxUEmibbBf0zypKCNzNKP7Op2UM'
@@ -57,7 +49,7 @@ class Mercure {
       },
       form: [
         ['topic', 'topics'],
-        ['data', JSON.stringify(this.topics)],
+        ['data', topicName],
       ],
     })
   }
