@@ -51,7 +51,7 @@ services:
       SERVER_NAME: ':1405'
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
-      MERCURE_EXTRA_DIRECTIVES: |
+      MERCURE_EXTRA_DIRECTIVES: |-
         cors_origins "http://localhost:1420"
         anonymous
     # Uncomment the following line to enable the development mode
