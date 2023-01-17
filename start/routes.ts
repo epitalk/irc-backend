@@ -22,7 +22,7 @@ import Route from '@ioc:Adonis/Core/Route'
 import PostsController from 'App/Controllers/Http/PostsController'
 
 Route.get('/', async () => {
-  return { hello: 'dsds' }
+  return { hello: 'DSDS' }
 })
 
 Route.get('/test', async (ctx) => {
