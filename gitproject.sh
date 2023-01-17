@@ -1,6 +1,9 @@
 #!/bin/bash
 #Install github cli instruction if not exit on your machine
-command -v gh >/dev/null 2>&1 || { echo >&2 "please install github cli and run command gh auth login: https://cli.github.com/manual/installation"; exit 1; }
+command -v gh >/dev/null 2>&1 || {
+  echo >&2 "please install github cli and run command gh auth login: https://cli.github.com/manual/installation"
+  exit 1
+}
 # Help command
 
 # Fonction for display help
@@ -28,8 +31,8 @@ MergeIssueInDevelop() {
   destination_branch="develop"
   # Get the current git branch
   current_branch=$(git rev-parse --abbrev-ref HEAD)
-  # Get first character branch name for get ticket number
-  ticket_number=${current_branch:0:1}
+  # Get number character branch name for get ticket number
+  ticket_number=$(echo "$current_branch" | grep -o '[0-9]\+')
   gh issue close "$ticket_number"
 
   git pull origin "$destination_branch"
