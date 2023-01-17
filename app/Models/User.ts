@@ -1,7 +1,9 @@
 import { column, BaseModel } from '@ioc:Adonis/Lucid/Orm'
 import { DateTime } from 'luxon'
 
-class User extends BaseModel {
+export default class User extends BaseModel {
+  public static table = 'user'
+
   @column({ isPrimary: true })
   public id: bigint
 

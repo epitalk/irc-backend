@@ -7,6 +7,8 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+    env_file:
+      - .env
     command: bash -c "npm install && node ace serve --watch"
     ports:
       - "3333:3333"
@@ -14,6 +16,7 @@ services:
       - app-network
 
   db:
+    container_name: db
     image: mariadb:latest
     restart: always
     environment:

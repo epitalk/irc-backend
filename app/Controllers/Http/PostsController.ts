@@ -1,17 +1,13 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Database from '@ioc:Adonis/Lucid/Database'
-import Hash from '@ioc:Adonis/Core/Hash'
+import User from 'App/Models/User'
 
 export default class PostsController {
   public async index(ctx: HttpContextContract) {
-    Database.table('users')
-      .returning('id')
-      .insert({
-        username: 'virk',
-        email: 'virk@adonisjs.com',
-        password: await Hash.make('secret'),
-      })
+    const user = new User()
+    user.username = 'testtttttt'
 
-    ctx.response.send({ hello: 'TESTTTTTT' })
+    await user.save()
+
+    ctx.response.send({ result: user.$isPersisted })
   }
 }
