@@ -12,10 +12,10 @@ Route.get('/chat/channels', async () => {
   return Mercure.getTopic()
 })
 
-Route.post('/chat/public', async ({ request }) => {
+Route.post('/chat/channel/:channel', async ({ request, params }) => {
   const message: string = await request.input('message')
 
-  new Update(['general'], { message }).send()
+  new Update([params.channel], { message }).send()
 
   return { message }
 })
