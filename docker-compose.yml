@@ -14,8 +14,6 @@ services:
     depends_on:
       - db
       - phpmyadmin
-    networks:
-      - app-network
 
   db:
     container_name: db
@@ -26,12 +24,11 @@ services:
       MYSQL_DATABASE: irc
       MYSQL_USER: adonis
       MYSQL_PASSWORD: adonis
+      MYSQL_ROOT_HOST: '%'
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - app-network
 
   phpmyadmin:
     container_name: phpmyadmin
@@ -43,8 +40,6 @@ services:
       PMA_PASSWORD: root
     ports:
       - "8080:80"
-    networks:
-      - app-network
 
   mercure-sse:
     container_name: mercure-sse
@@ -70,6 +65,3 @@ volumes:
   caddy_data:
   caddy_config:
   db_data:
-
-networks:
-  app-network:
