@@ -1,7 +1,7 @@
 import UserService from 'App/Services/UserService'
 
 export default class UserController {
-  private async index({ request, response }) {
+  private async index({ response }) {
     const users = await UserService.index()
 
     return response.json(users)
