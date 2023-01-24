@@ -5,13 +5,10 @@ export default class extends BaseSchema {
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id').primary()
       table.text('content')
-      table.integer('channel_id').unsigned().references('id').inTable('channel')
-      table.integer('user_id').unsigned().references('id').inTable('user')
-      /**
-       * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
-       */
+      table.integer('channel_id').unsigned().references('id').inTable('channel').onDelete('CASCADE')
+      table.integer('user_id').unsigned().references('id').inTable('user').onDelete('CASCADE')
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
