@@ -19,7 +19,9 @@
     ],
     "rules": {
       "prettier/prettier": [
-        "error"
+        "error",
+        {
+          "endOfLine": "auto"}
       ]
     }
   },
@@ -33,6 +35,7 @@
     "useTabs": false,
     "quoteProps": "consistent",
     "bracketSpacing": true,
+    "endOfLine": "auto",
     "arrowParens": "always",
     "printWidth": 100
   },

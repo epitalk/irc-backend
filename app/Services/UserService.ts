@@ -2,21 +2,15 @@ import User from 'App/Models/User'
 
 export default class UserService {
   public static async index() {
-    const users = await User.all()
-
-    return users
+    return await User.all()
   }
 
   public static async store({ username }) {
-    const user = await User.create({ username })
-
-    return user
+    return await User.create({ username })
   }
 
   public static async show(id) {
-    const user = await User.findOrFail(id)
-
-    return user
+    return await User.findOrFail(id)
   }
 
   public static async update(id, data) {
