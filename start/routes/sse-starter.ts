@@ -8,10 +8,6 @@ Route.get('/auth/:id', async () => {
   })
 })
 
-Route.get('/chat/channels', async () => {
-  return Mercure.getTopic()
-})
-
 Route.post('/chat/channel/:channel', async ({ request, params }) => {
   const message: string = await request.input('message')
 
@@ -27,37 +23,6 @@ Route.post('/chat/channel/:channel', async ({ request, params }) => {
 //
 //   return { status: 'Ok' }
 // })
-
-Route.post('/chat/channel', async ({ request }) => {
-  const topic: string = await request.input('name')
-  await Mercure.createTopic(topic)
-
-  return Mercure.getTopic()
-})
-
-class Mercure {
-  private static topics = ['general'] as String[]
-  private static mercureUrl = 'http://localhost:1405/.well-known/mercure'
-  private static token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.obDjwCgqtPuIvwBlTxUEmibbBf0zypKCNzNKP7Op2UM'
-
-  public static createTopic(topicName: string) {
-    this.topics.push(topicName)
-    return got.post(this.mercureUrl, {
-      headers: {
-        Authorization: 'Bearer ' + this.token,
-      },
-      form: [
-        ['topic', 'topics'],
-        ['data', topicName],
-      ],
-    })
-  }
-
-  public static getTopic() {
-    return this.topics
-  }
-}
 
 class Update {
   constructor(

@@ -1,4 +1,5 @@
 import ChannelService from 'App/Services/ChannelService'
+import MercureService from "../../Services/MercureService";
 
 export default class ChannelController {
   private async index({ response }) {
@@ -10,7 +11,7 @@ export default class ChannelController {
   private async store({ request, response }) {
     const { name } = request.all()
     const channel = await ChannelService.store({ name })
-
+    await MercureService.createTopic(channel)
     return response.status(201).json(channel)
   }
 
