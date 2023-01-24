@@ -2,7 +2,7 @@ import Message from 'App/Models/Message'
 
 export default class MessageService {
   public static async index() {
-    const messages = await Message.query().with('user').with('channel').fetch()
+    const messages = await Message.all();
 
     return messages
   }
