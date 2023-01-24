@@ -1,22 +1,16 @@
-import Message from 'App/Models/Message'
+import Message from "App/Models/Message";
 
 export default class MessageService {
   public static async index() {
-    const messages = await Message.all();
-
-    return messages
+    return await Message.all()
   }
 
-  public static async store({ content, channel_id, user_id }) {
-    const message = await Message.create({ content, channel_id, user_id })
-
-    return message
+  public static async store({ content, channel_id, user_id }: {content: string, channel_id: number, user_id: number}) {
+    return await Message.create({ content, channel_id, user_id })
   }
 
   public static async show(id) {
-    const message = await Message.findOrFail(id)
-
-    return message
+    return await Message.findOrFail(id)
   }
 
   public static async update(id, data) {

@@ -1,22 +1,16 @@
-import Channel from 'App/Models/Channel'
+import Channel from "App/Models/Channel";
 
 export default class ChannelService {
   public static async index() {
-    const channels = await Channel.all()
-
-    return channels
+    return Channel.query().orderBy('id', 'asc');
   }
 
   public static async store({ name }) {
-    const channel = await Channel.create({ name })
-
-    return channel
+    return await Channel.create({ name })
   }
 
   public static async show(id) {
-    const channel = await Channel.findOrFail(id)
-
-    return channel
+    return await Channel.findOrFail(id)
   }
 
   public static async update(id, data) {
