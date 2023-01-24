@@ -4,25 +4,60 @@ import got from 'got'
 
 Route.get('/auth/:id', async () => {
   return await computedToken({
-    mercure: { subscribe: [`/alert`] },
+    mercure: { subscribe: [`*`] },
   })
 })
 
-Route.post('/chat/public', async ({ request }) => {
+Route.get('/chat/channels', async () => {
+  return Mercure.getTopic()
+})
+
+Route.post('/chat/channel/:channel', async ({ request, params }) => {
   const message: string = await request.input('message')
 
-  new Update(['/chat'], { message }).send()
+  new Update([params.channel], { message }).send()
 
   return { message }
 })
 
-Route.get('/private', () => {
-  const data = { foo: 'bar' }
+// Route.get('/private', () => {
+//   const data = { foo: 'bar' }
+//
+//   new Update(['/chat'], data, true).send()
+//
+//   return { status: 'Ok' }
+// })
 
-  new Update(['/chat'], data, true).send()
+Route.post('/chat/channel', async ({ request }) => {
+  const topic: string = await request.input('name')
+  await Mercure.createTopic(topic)
 
-  return { status: 'Ok' }
+  return Mercure.getTopic()
 })
+
+class Mercure {
+  private static topics = ['general'] as String[]
+  private static mercureUrl = 'http://localhost:1405/.well-known/mercure'
+  private static token =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtZXJjdXJlIjp7InB1Ymxpc2giOlsiKiJdfX0.obDjwCgqtPuIvwBlTxUEmibbBf0zypKCNzNKP7Op2UM'
+
+  public static createTopic(topicName: string) {
+    this.topics.push(topicName)
+    return got.post(this.mercureUrl, {
+      headers: {
+        Authorization: 'Bearer ' + this.token,
+      },
+      form: [
+        ['topic', 'topics'],
+        ['data', topicName],
+      ],
+    })
+  }
+
+  public static getTopic() {
+    return this.topics
+  }
+}
 
 class Update {
   constructor(
