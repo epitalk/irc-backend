@@ -29,8 +29,8 @@ export default class ChannelController {
   }
 
   private async destroy({ params, response }) {
-    await ChannelService.destroy(params.id)
-
+    const res = await ChannelService.destroy(params.name)
+    if (!res) return response.status(404).send('Channel not found')
     return response.status(204).json(null)
   }
 }
