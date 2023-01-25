@@ -32,6 +32,7 @@ class Update {
   ) {}
 
   public send() {
+    console.log("send");
     return got.post('http://localhost:1405/.well-known/mercure', {
       headers: {
         Authorization:

@@ -1,5 +1,6 @@
-import { column, BaseModel } from '@ioc:Adonis/Lucid/Orm'
+import { column, BaseModel, ManyToMany, manyToMany } from "@ioc:Adonis/Lucid/Orm";
 import { DateTime } from 'luxon'
+import User from "App/Models/User";
 
 export default class Channel extends BaseModel {
   public static table = 'channel'
@@ -9,6 +10,9 @@ export default class Channel extends BaseModel {
 
   @column()
   public name: string
+
+  @manyToMany(() => User)
+  public users: ManyToMany<typeof User>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
