@@ -22,7 +22,7 @@ export default class UserController {
 
   private async update({ params, request, response }) {
     const { username } = request.all()
-    const user = await UserService.update(params.id, { username })
+    const user = await UserService.update(params.username, { username })
 
     return response.json(user)
   }
