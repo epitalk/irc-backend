@@ -5,5 +5,5 @@ Route.group(() => {
   Route.post('channel', 'ChannelController.store')
   Route.get('channel/:id', 'ChannelController.show')
   Route.put('channel/:id', 'ChannelController.update')
-  Route.delete('channel/:id', 'ChannelController.destroy')
+  Route.delete('channel/:name', 'ChannelController.destroy')
 }).prefix('api/')
