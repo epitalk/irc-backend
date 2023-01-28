@@ -2,6 +2,8 @@ import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class ChannelUser extends BaseModel {
+  public static table = 'channel_user'
+
   @column({ isPrimary: true })
   public id: number
 

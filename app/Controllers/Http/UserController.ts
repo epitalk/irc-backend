@@ -1,4 +1,5 @@
 import UserService from 'App/Services/UserService'
+import ChannelService from "App/Services/ChannelService";
 
 export default class UserController {
   private async index({ response }) {
@@ -10,7 +11,7 @@ export default class UserController {
   private async store({ request, response }) {
     const { username } = request.all()
     const user = await UserService.store({ username })
-
+    await ChannelService.addUserChannel('general', user.username)
     return response.status(201).json(user)
   }
 

@@ -15,6 +15,22 @@ export default class ChannelController {
     return response.status(201).json(channel)
   }
 
+  private async addUserChannel({ request, response }) {
+    const { channel, username }: {channel: string, username: string} = request.all()
+    const channelUpdated = await ChannelService.addUserChannel(channel, username)
+
+    if (!channelUpdated) return response.status(404).send('Channel or user not found')
+    return response.status(200).json(channelUpdated)
+  }
+
+  private async removeUserChannel({ request, response }) {
+    const { channel, username }: {channel: string, username: string} = request.all()
+    const channelUpdated = await ChannelService.removeUserChannel(channel, username)
+
+    if (!channelUpdated) return response.status(404).send('Channel or user not found')
+    return response.status(200).json(channelUpdated)
+  }
+
   private async show({ params, response }) {
     const channel = await ChannelService.show(params.id)
 

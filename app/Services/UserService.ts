@@ -9,6 +9,10 @@ export default class UserService {
     return await User.create({ username });
   }
 
+  public static async findByUserName(username: string) {
+    return await User.findBy('username', username)
+  }
+
   public static async show(id) {
     return await User.findOrFail(id);
   }
