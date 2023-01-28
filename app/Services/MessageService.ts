@@ -5,10 +5,6 @@ export default class MessageService {
     return await Message.all()
   }
 
-  public static async store({ content, channel_id, user_id }: {content: string, channel_id: number, user_id: number}) {
-    return await Message.create({ content, channel_id, user_id })
-  }
-
   public static async show(id) {
     return await Message.findOrFail(id)
   }

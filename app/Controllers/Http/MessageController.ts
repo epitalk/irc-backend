@@ -1,4 +1,5 @@
 import MessageService from 'App/Services/MessageService'
+import MercureService from "App/Services/MercureService";
 
 export default class MessageController {
   private async index({ response }) {
@@ -7,11 +8,11 @@ export default class MessageController {
     return response.json(messages)
   }
 
-  private async store({ request, response }) {
-    const { content, channel_id, user_id } = request.all()
-    const message = await MessageService.store({ content, channel_id, user_id })
+  private async store({ request, response, params }) {
+    const { content, username }: {content: string, username: string} = request.all()
 
-    return response.status(201).json(message)
+    const newMessage = await MercureService.newMessage({content, username}, params.channel)
+    return response.status(201).json(newMessage)
   }
 
   private async show({ params, response }) {

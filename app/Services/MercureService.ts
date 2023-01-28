@@ -1,23 +1,33 @@
 import got from "got";
-import Env from '@ioc:Adonis/Core/Env'
+import Env from "@ioc:Adonis/Core/Env";
 import Channel from "App/Models/Channel";
 
 export default class MercureService {
-  private static mercureUrl = Env.get('MERCURE_URL')
-  private static token = Env.get('MERCURE_TOKEN')
+  private static mercureUrl = Env.get("MERCURE_URL");
+  private static token = Env.get("MERCURE_TOKEN");
 
-  public static createTopic(channel: Channel) {
-
-    console.log(channel.serialize());
-
-    return got.post(this.mercureUrl, {
+  public static async newMessage(message: {content: string, username: string}, channel: string) {
+    await got.post(this.mercureUrl, {
       headers: {
-        Authorization: 'Bearer ' + this.token,
+        Authorization: "Bearer " + this.token
       },
       form: [
-        ['topic', 'topics'],
-        ['data', JSON.stringify(channel)],
-      ],
-    })
+        ["topic", channel],
+        ["data", JSON.stringify(message)]
+      ]
+    });
+    return message
+  }
+
+  public static createTopic(channel: Channel) {
+    return got.post(this.mercureUrl, {
+      headers: {
+        Authorization: "Bearer " + this.token
+      },
+      form: [
+        ["topic", "topics"],
+        ["data", JSON.stringify(channel)]
+      ]
+    });
   }
 }
