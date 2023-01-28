@@ -2,11 +2,15 @@ import Message from "App/Models/Message";
 
 export default class MessageService {
   public static async index() {
-    return await Message.all()
+    return Message.query().preload('user');
   }
 
   public static async show(id) {
     return await Message.findOrFail(id)
+  }
+
+  public static async store(content: string, channelId: bigint, userId: bigint) {
+    return await Message.create({ content, channelId, userId })
   }
 
   public static async update(id, data) {

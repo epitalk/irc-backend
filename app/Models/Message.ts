@@ -1,26 +1,28 @@
-import { column, BaseModel, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
-import { DateTime } from 'luxon'
-import Channel from 'App/Models/Channel'
-import User from 'App/Models/User'
+import { column, BaseModel, BelongsTo, belongsTo } from "@ioc:Adonis/Lucid/Orm";
+import { DateTime } from "luxon";
+import User from "App/Models/User";
 
 export default class Message extends BaseModel {
-  public static table = 'message'
+  public static table = "message";
 
   @column({ isPrimary: true })
-  public id: bigint
+  public id: bigint;
 
   @column()
-  public content: string
+  public content: string;
 
-  @hasOne(() => Channel)
-  public channel_id: HasOne<typeof Channel>
+  @column({columnName: "channel_id"})
+  public channelId: bigint;
 
-  @hasOne(() => User)
-  public user_id: HasOne<typeof User>
+  @belongsTo(() => User)
+  public user: BelongsTo<typeof User>
+
+  @column({columnName: "user_id"})
+  public userId: bigint;
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public createdAt: DateTime;
 
   @column.dateTime({ autoUpdate: true })
-  public updatedAt: DateTime
+  public updatedAt: DateTime;
 }
