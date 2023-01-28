@@ -7,11 +7,11 @@ export default class ChannelUser extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column()
-  public channel_id: number
+  @column({columnName: "channel_id"})
+  public channelId: number
 
-  @column()
-  public user_id: number
+  @column({columnName: "user_id"})
+  public userId: number
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
