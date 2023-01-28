@@ -9,10 +9,14 @@ export default class ChannelController {
   }
 
   private async store({ request, response }) {
-    const { name } = request.all()
+    const { name, author }: {name: string, author: string} = request.all()
     const channel = await ChannelService.store({ name })
-    await MercureService.createTopic(channel)
-    return response.status(201).json(channel)
+    await ChannelService.addUserChannel(channel.name, author)
+    const res = await ChannelService.show(channel.id)
+    if (res){
+      await MercureService.createTopic(res)
+    }
+    return response.status(201).json(res)
   }
 
   private async addUserChannel({ request, response }) {

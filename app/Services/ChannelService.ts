@@ -39,8 +39,8 @@ export default class ChannelService {
     return await Channel.findBy("name", name);
   }
 
-  public static async show(id: number) {
-    return await Channel.findOrFail(id);
+  public static async show(id: BigInt) {
+    return await Channel.query().where({id}).preload('users').first();
   }
 
   public static async update(id: number, data: { name: string }) {
