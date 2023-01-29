@@ -1,4 +1,5 @@
 import User from "App/Models/User";
+import Env from "@ioc:Adonis/Core/Env";
 
 export default class UserService {
   public static async index() {
@@ -11,6 +12,9 @@ export default class UserService {
 
   public static async findByUserName(username: string) {
     return await User.findBy('username', username)
+  }
+  public static async getAdminUser() {
+    return await this.findByUserName(Env.get('SITE_NAME'))
   }
 
   public static async show(id) {

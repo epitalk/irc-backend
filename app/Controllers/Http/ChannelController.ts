@@ -1,5 +1,7 @@
 import ChannelService from "App/Services/ChannelService";
 import MercureService from "../../Services/MercureService";
+import MessageService from "App/Services/MessageService";
+import UserService from "App/Services/UserService";
 
 export default class ChannelController {
   private async index({ response }) {
@@ -14,32 +16,59 @@ export default class ChannelController {
     await ChannelService.addUserChannel(channel.name, author);
     const res = await ChannelService.show(channel.id);
     if (res) {
-      await MercureService.createTopic(res);
+      await MercureService.actionTopic(res, "create");
     }
     return response.status(201).json(res);
   }
 
-  private async chatActions({ request, response }) {
-    const { event, username, channel }: { event: "leave" | "join", username: string, channel: string } = request.all();
-    await MercureService.chatActions(event, username, channel);
-    return response.status(204);
-  }
-
-
   private async addUserChannel({ request, response }) {
     const { channel, username }: { channel: string, username: string } = request.all();
-    const channelUpdated = await ChannelService.addUserChannel(channel, username);
+    await ChannelService.addUserChannel(channel, username);
+    const adminUser = await UserService.getAdminUser();
+    const fullChannel = await ChannelService.findByName(channel);
 
-    if (!channelUpdated) return response.status(404).send("Channel or user not found");
-    return response.status(200).json(channelUpdated);
+    if (!fullChannel) return response.status(404).send("Channel not found");
+    const user = await UserService.findByUserName(username)
+    await MercureService.actionTopic(fullChannel, "join", user);
+
+    if (adminUser) {
+      const content = `${username} viens de rejoindre le channel ${channel}`;
+      await MercureService.newMessage({
+        content,
+        username: adminUser.username
+      }, channel);
+
+      await MessageService.store(content, fullChannel.id, adminUser.id);
+    }
+
+
+    return response.status(200).json(fullChannel);
   }
 
   private async removeUserChannel({ request, response }) {
     const { channel, username }: { channel: string, username: string } = request.all();
-    const channelUpdated = await ChannelService.removeUserChannel(channel, username);
+    await ChannelService.removeUserChannel(channel, username);
+    const fullChannel = await ChannelService.findByName(channel);
+    const adminUser = await UserService.getAdminUser();
 
-    if (!channelUpdated) return response.status(404).send("Channel or user not found");
-    return response.status(200).json(channelUpdated);
+    if (!fullChannel) return response.status(404).send("Channel not found");
+
+    const user = await UserService.findByUserName(username)
+    await MercureService.actionTopic(fullChannel, "leave", user);
+
+    if (adminUser) {
+      const content = `${username} viens de quitter le channel ${channel}`;
+
+      await MercureService.newMessage({
+        content,
+        username: adminUser.username
+      }, channel);
+
+      await MessageService.store(content, BigInt(fullChannel.id), adminUser.id);
+    }
+
+
+    return response.status(200).json(fullChannel);
   }
 
   private async show({ params, response }) {
@@ -57,7 +86,9 @@ export default class ChannelController {
 
   private async destroy({ params, response }) {
     const res = await ChannelService.destroy(params.name);
+    console.log(res);
     if (!res) return response.status(404).send("Channel not found");
+    await MercureService.actionTopic(res, "delete");
     return response.status(204).json(null);
   }
 }
