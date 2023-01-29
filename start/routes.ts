@@ -1,5 +1,6 @@
 import Route from '@ioc:Adonis/Core/Route'
-import './routes/message'
+import './routes/channelMessage'
+import './routes/privateMessage'
 import './routes/channel'
 import './routes/user'
 

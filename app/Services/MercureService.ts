@@ -7,6 +7,21 @@ export default class MercureService {
   private static mercureUrl = Env.get("MERCURE_URL");
   private static token = Env.get("MERCURE_TOKEN");
 
+  public static async sendPrivateMessage(content: string, userToken: string) {
+    const privateChannel = `@me-${userToken}`;
+    console.log(privateChannel);
+    await got.post(this.mercureUrl, {
+      headers: {
+        Authorization: "Bearer " + this.token
+      },
+      form: [
+        ["topic", privateChannel],
+        ["data", content]
+      ]
+    });
+    return content;
+  }
+
   public static async newMessage(message: {content: string, username: string}, channel: string) {
     await got.post(this.mercureUrl, {
       headers: {

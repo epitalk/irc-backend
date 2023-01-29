@@ -1,6 +1,6 @@
 import ChannelService from "App/Services/ChannelService";
 import MercureService from "../../Services/MercureService";
-import MessageService from "App/Services/MessageService";
+import ChannelMessageService from "App/Services/ChannelMessageService";
 import UserService from "App/Services/UserService";
 
 export default class ChannelController {
@@ -38,7 +38,7 @@ export default class ChannelController {
         username: adminUser.username
       }, channel);
 
-      await MessageService.store(content, fullChannel.id, adminUser.id);
+      await ChannelMessageService.store(content, fullChannel.id, adminUser.id);
     }
 
 
@@ -64,7 +64,7 @@ export default class ChannelController {
         username: adminUser.username
       }, channel);
 
-      await MessageService.store(content, BigInt(fullChannel.id), adminUser.id);
+      await ChannelMessageService.store(content, BigInt(fullChannel.id), adminUser.id);
     }
 
 

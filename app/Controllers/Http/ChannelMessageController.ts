@@ -1,11 +1,11 @@
-import MessageService from 'App/Services/MessageService'
+import ChannelMessageService from 'App/Services/ChannelMessageService'
 import MercureService from "App/Services/MercureService";
 import ChannelService from "App/Services/ChannelService";
 import UserService from "App/Services/UserService";
 
-export default class MessageController {
+export default class ChannelMessageController {
   private async index({ response }) {
-    const messages = await MessageService.index()
+    const messages = await ChannelMessageService.index()
 
     return response.json(messages)
   }
@@ -20,25 +20,25 @@ export default class MessageController {
 
     const newMessage = await MercureService.newMessage({content, username}, params.channel)
 
-    await MessageService.store(content, channel.id, user.id)
+    await ChannelMessageService.store(content, channel.id, user.id)
     return response.status(201).json(newMessage)
   }
 
   private async show({ params, response }) {
-    const message = await MessageService.show(params.id)
+    const message = await ChannelMessageService.show(params.id)
 
     return response.json(message)
   }
 
   private async update({ params, request, response }) {
     const { content } = request.all()
-    const message = await MessageService.update(params.id, { content })
+    const message = await ChannelMessageService.update(params.id, { content })
 
     return response.json(message)
   }
 
   private async destroy({ params, response }) {
-    await MessageService.destroy(params.id)
+    await ChannelMessageService.destroy(params.id)
 
     return response.status(204).json(null)
   }

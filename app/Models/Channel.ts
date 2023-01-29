@@ -1,7 +1,7 @@
 import { column, BaseModel, ManyToMany, manyToMany, hasMany, HasMany } from "@ioc:Adonis/Lucid/Orm";
 import { DateTime } from 'luxon'
 import User from "App/Models/User";
-import Message from "App/Models/Message";
+import ChannelMessage from "App/Models/ChannelMessage";
 
 export default class Channel extends BaseModel {
   public static table = 'channel'
@@ -12,8 +12,8 @@ export default class Channel extends BaseModel {
   @column()
   public name: string
 
-  @hasMany(() => Message)
-  public messages: HasMany<typeof Message>
+  @hasMany(() => ChannelMessage)
+  public messages: HasMany<typeof ChannelMessage>
 
   @manyToMany(() => User)
   public users: ManyToMany<typeof User>
