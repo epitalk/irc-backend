@@ -6,8 +6,8 @@ export default class PrivateMessagesController {
   private async index(){
     return PrivateMessageService.index()
   }
-  private async getUserMessage({params}){
-    return PrivateMessageService.getUserMessage(params.userId)
+  private async getUsersWithMessage({params}){
+    return PrivateMessageService.getUsersWithMessage(params.userId)
   }
   private async store({ request, response, params }) {
     const { content }: {content: string} = request.all()

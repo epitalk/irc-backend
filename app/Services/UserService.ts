@@ -4,8 +4,7 @@ import AuthService from "App/Services/AuthService";
 
 export default class UserService {
   public static async index() {
-    const users = await User.all();
-    return users.map(({token, ...keepAttrs}) => keepAttrs)
+    return await User.all()
   }
 
   public static async store({ username }) {
