@@ -12,16 +12,20 @@ export default class PrivateMessagesController {
   private async store({ request, response, params }) {
     const { content }: {content: string} = request.all()
 
-    await UserService.show(params.senderId)
-    const receiver = await UserService.show(params.receiverId)
+    const sender = await UserService.findByUserName(params.sender)
+    const receiver = await UserService.findByUserName(params.receiver)
+
+    if (!receiver || !sender){
+      return response.status(404).json("A user not found")
+    }
 
     let message = ""
 
      if (receiver.token){
-       message = await MercureService.sendPrivateMessage(content, receiver.token)
+       message = await MercureService.sendPrivateMessage(content, sender.username, receiver.token)
      }
 
-    await PrivateMessageService.store(content, params.receiverId, params.senderId)
+    await PrivateMessageService.store(content, receiver.id, sender.id)
     return response.status(201).json(message)
   }
 }

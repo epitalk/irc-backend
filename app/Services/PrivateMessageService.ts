@@ -20,21 +20,27 @@ export default class PrivateMessageService {
           .andOnVal("user.id", "!=", userId)
       })
       .where('private_message.receiver_id', userId)
-      .orWhere('private_message.sender_id', userId)
-      .orderBy('private_message.id', 'desc');
+      .orWhere('private_message.sender_id', userId);
 
     for (const u of users) {
       u.messages = await Database
         .from("private_message")
-        .select("*")
-        .where((builder) => {
-          builder.where({ receiver_id: userId, sender_id: 1 })
-            .orWhere({ receiver_id: 1, sender_id: userId });
+        .select("*", "private_message.created_at")
+        .join("user", (query) => {
+          query
+            .on("private_message.sender_id", "=", "user.id")
         })
-        .orderBy("id", "desc");
+        .where((builder) => {
+          builder.where({ receiver_id: userId, sender_id: u.id })
+            .orWhere({ receiver_id: u.id, sender_id: userId });
+        })
     }
 
-    return users
+    return users.sort((a, b) => {
+      const lastMessageA = a.messages[a.messages.length - 1].id;
+      const lastMessageB = b.messages[b.messages.length - 1].id;
+      return lastMessageB - lastMessageA;
+    })
   }
 
   public static async show(id) {
