@@ -1,17 +1,23 @@
 import User from "App/Models/User";
 import Env from "@ioc:Adonis/Core/Env";
+import AuthService from "App/Services/AuthService";
 
 export default class UserService {
   public static async index() {
-    return await User.all();
+    return await User.all()
   }
 
   public static async store({ username }) {
-    return await User.create({ username });
+    const token = await AuthService.computedToken(username)
+    return await User.create({ username, token })
   }
 
   public static async findByUserName(username: string) {
-    return await User.findBy('username', username)
+    const user = await User.findBy('username', username)
+    if (user){
+      delete user.token
+    }
+    return user
   }
   public static async getAdminUser() {
     return await this.findByUserName(Env.get('SITE_NAME'))
