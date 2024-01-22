@@ -107,7 +107,7 @@ jobs:
             echo "Running Seeders..."
             node ace db:seed
             echo "Deploying Mercure SSE service..."
-            docker-compose up -d mercure-sse
+            sudo docker-compose up -d mercure-sse
             echo "Mercure SSE service deployed successfully!"
             echo "Deployment completed successfully!"
 
