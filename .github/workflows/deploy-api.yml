@@ -68,6 +68,16 @@ jobs:
             else
               echo "rsync is already installed."
             fi
+
+            if ! command -v docker-compose &> /dev/null
+            then
+              echo "docker-compose could not be found, installing..."
+              sudo curl -L "https://github.com/docker/compose/releases/download/2.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              sudo chmod +x /usr/local/bin/docker-compose
+            else
+              echo "docker-compose is already installed."
+            fi
+
             echo "Starting deployment..."
           SCRIPT_AFTER: |
             cd ${{ env.APP_DIR }}/html
