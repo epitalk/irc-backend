@@ -1,0 +1,90 @@
+name: 🚀 Deploy adonisjs Api to VPS
+
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APP_DIR: /var/www/epitalk.api.dibodev.com
+      DOMAIN: epitalk.api.dibodev.com
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+
+      - name: 🚀 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 🔍 Install dependencies
+        run: npm install
+
+      - name: 📝 Setup Production .env File
+        run: cp .env.production .env
+
+      - name: 📝 Update .env with Secrets
+        run: |
+          sed -i "s|APP_KEY=.*|APP_KEY=${{ secrets.APP_KEY }}|" .env
+          sed -i "s|MYSQL_DATABASE=.*|MYSQL_DATABASE=${{ secrets.DATABASE_DB_NAME }}|" .env
+          sed -i "s|MYSQL_HOST=.*|MYSQL_HOST=${{ secrets.MYSQL_HOST }}|" .env
+          sed -i "s|MYSQL_PORT=.*|MYSQL_PORT=${{ secrets.MYSQL_PORT }}|" .env
+          sed -i "s|MYSQL_USER=.*|MYSQL_USER=${{ secrets.MYSQL_USER }}|" .env
+          sed -i "s|MYSQL_PASSWORD=.*|MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}|" .env
+          sed -i "s|MERCURE_TOKEN=.*|MERCURE_TOKEN=${{ secrets.MERCURE_TOKEN }}|" .env
+
+      - name: 🧱 Build application
+        run: |
+          npm run build
+          cp .env build/.env
+
+      - name: 🛁 Clean install for production
+        run: cd build && npm ci --production --ignore-scripts
+
+      - name: 📤 Deploy to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./build/"
+          target: ${{ env.APP_DIR }}/html
+
+      - name: 📤 Deploy to VPS
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-azrut --delete"
+          SOURCE: "build/"
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USERNAME }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          TARGET: ${{ env.APP_DIR }}/html
+          SCRIPT_BEFORE: |
+            if ! command -v rsync &> /dev/null
+            then
+              echo "rsync could not be found, installing..."
+              sudo apt-get update
+              sudo apt-get install -y rsync
+            else
+              echo "rsync is already installed."
+            fi
+            echo "Starting deployment..."
+          SCRIPT_AFTER: |
+            cd ${{ env.APP_DIR }}/html
+            echo "Restarting API with PM2..."
+            pm2 restart ${{ env.DOMAIN }} || pm2 start server.js --name ${{ env.DOMAIN }}
+            pm2 save
+            echo "Restarting Nginx..."
+            sudo systemctl restart nginx
+            echo "Running Migrations..."
+            node ace migration:run --force
+            echo "Running Seeders..."
+            node ace db:seed
+            echo "Deployment completed successfully!"
