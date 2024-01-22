@@ -1,5 +1,5 @@
 import UserService from 'App/Services/UserService'
-import ChannelService from "App/Services/ChannelService";
+import ChannelService from 'App/Services/ChannelService'
 
 export default class UserController {
   private async index({ response }) {
