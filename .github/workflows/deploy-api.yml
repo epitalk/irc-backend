@@ -88,3 +88,26 @@ jobs:
             echo "Running Seeders..."
             node ace db:seed
             echo "Deployment completed successfully!"
+
+      - name: 📤 Copy Docker Compose file for Mercure SSE to VPS
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "./path_to_your_mercure_docker_compose/docker-compose-mercure.yml"
+          target: ${{ env.APP_DIR }}
+
+      - name: 🚀 Start Mercure SSE service
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USERNAME }}
+          REMOTE_PORT: ${{ secrets.SSH_PORT }}
+          TARGET: ${{ env.APP_DIR }}
+          SCRIPT: |
+            echo "Deploying Mercure SSE service..."
+            cd ${{ env.APP_DIR }}
+            docker-compose -f docker-compose-mercure.yml up -d
+            echo "Mercure SSE service deployed successfully!"
