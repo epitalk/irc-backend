@@ -69,13 +69,14 @@ jobs:
               echo "rsync is already installed."
             fi
 
-            if ! command -v docker-compose &> /dev/null
+            if ! docker-compose --version &> /dev/null
             then
-              echo "docker-compose could not be found, installing..."
+              echo "docker-compose could not be found or is not working, installing..."
+              sudo rm -f /usr/local/bin/docker-compose
               sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               sudo chmod +x /usr/local/bin/docker-compose
             else
-              echo "docker-compose is already installed."
+              echo "docker-compose is already installed and working."
             fi
 
             echo "Starting deployment..."
