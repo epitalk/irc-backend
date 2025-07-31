@@ -11,8 +11,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      APP_DIR: /var/www/epitalk.api.dibodev.com
-      DOMAIN: epitalk.api.dibodev.com
+      APP_DIR: /var/www/epitalk.api.dibodev.fr
+      DOMAIN: epitalk.api.dibodev.fr
     steps:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
