@@ -31,7 +31,7 @@ services:
       MERCURE_PUBLISHER_JWT_KEY: '!ChangeMe!'
       MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeMe!'
       MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://localhost:4200 https://epitalk.dibodev.fr
+        cors_origins http://localhost:4200 https://epitalk.api.dibodev.fr https://epitalk.dibodev.fr
         anonymous
     # Uncomment the following line to enable the development mode
     command: /usr/bin/caddy run --config /etc/caddy/Caddyfile.dev
